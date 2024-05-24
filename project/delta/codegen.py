@@ -49,10 +49,6 @@ class CodeGenerationVisitor(PTNodeVisitor):
                 case '%':
                     result.append('    i32.rem_s\n')
         return ''.join(result)
-    
-    def visit_parenthesis(self, node, children):
-        print('parenth', children)
-        return''
         
     def visit_decimal(self, node, children):
         return f'    i32.const {node.value}\n'
@@ -63,3 +59,6 @@ class CodeGenerationVisitor(PTNodeVisitor):
             return '    i32.const 1\n'
         else:
             return '    i32.const 0\n'
+        
+    def visit_parenthesis(self, node, children):
+        return children[0]
