@@ -60,5 +60,24 @@ class CodeGenerationVisitor(PTNodeVisitor):
         else:
             return '    i32.const 0\n'
         
+    def visit_unary(self, node, children):
+        result = children[-1]
+        for op in children[-2::-1]:
+            match op:
+                case'+':
+                    pass # Do nothing
+
+                case'-':
+                    result = (
+                        '    i32.const 0\n'
+                        + result
+                        + '    i32.sub\n'
+                    )  # Subtracts value with zero. We get the same number, but negative
+
+                case'!':
+                    result += '    i32.eqz\n' # Equals zero
+        return result
+        
     def visit_parenthesis(self, node, children):
         return children[0]
+        
