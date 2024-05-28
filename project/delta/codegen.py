@@ -53,6 +53,19 @@ class CodeGenerationVisitor(PTNodeVisitor):
     def visit_block(self, node, children):
         return ''.join(children)
     
+    def visit_while(self, node, children):
+        return (
+            '    block\n'
+            +'    loop\n'
+            + children[0]
+            +'    i32.eqz\n'
+            +'    br_if 1\n'
+            + children[1]
+            + '    br 0\n'
+            +'    end\n'
+            +'    end\n'
+        )
+
     def visit_expression(self, node, children):
         result = [children[0]]
         #El ciclo 'for 'se encarga de identificar los operadores a través de los índices impares (1, 3, 5, etc.)
@@ -103,10 +116,10 @@ class CodeGenerationVisitor(PTNodeVisitor):
                         '    i32.const 0\n'
                         + result
                         + '    i32.sub\n'
-                    )  # Subtracts value with zero. We get the same number, but negative
+                    )  # Subtracts value with zero. We get the same number, but negative.
 
                 case'!':
-                    result += '    i32.eqz\n' # Equals zero
+                    result += '    i32.eqz\n' # Equals zero.
         return result
         
     def visit_parenthesis(self, node, children):
