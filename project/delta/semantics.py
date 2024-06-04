@@ -63,4 +63,28 @@ class SemanticVisitor(PTNodeVisitor):
                 'Undeclared variable reference variable at position '
                 f'{self.position(node)} => {name}'
             )
+        
+    def visit_binary (self, node, children):
+        to_decimal = int(node.value[2:], 2)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
+        
+    def visit_octal (self, node, children):
+        to_decimal = int(node.value[2:], 8)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
+        
+    def visit_hexadecimal (self, node, children):
+        to_decimal = int(node.value[2:], 16)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
 
