@@ -6,7 +6,7 @@ comment = r'[/][/].*|[/][*](.|\n)*?[*][/]'
 identifier = r'[a-zA-Z]\w*' //# \w hace match con [0-9A-Za-z_], es decir, letras mayúsculas, minúsculas, dígitos y underscore (_).
 
 program = statement* expression EOF
-statement = declaration / assignment / if / while
+statement = declaration / assignment / if / while /dowhile
 declaration = 'var' decl_variable (',' decl_variable)* ';'
 decl_variable = identifier 
 assignment = lhs_variable '=' expression ';'
@@ -14,6 +14,7 @@ lhs_variable = identifier
 if = 'if' expression block ('else if' expression block)* (r'else' block)?
 block = '{' statement* '}' //#Block es el código a ejecutar dependiendo de la condicion.
 while = 'while' expression block
+dowhile = 'do' block 'while' expression ';'
 expression = comparison ('&&' comparison)*
 comparison = additive ((r'(==)' / r'(!=)' / r'(>=)' / r'(>)' / r'(<=)' / r'(<)') additive)*
 additive = multiplicative (('+' / '-' ) multiplicative)*
