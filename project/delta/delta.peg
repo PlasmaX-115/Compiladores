@@ -11,7 +11,7 @@ declaration = 'var' decl_variable (',' decl_variable)* ';'
 decl_variable = identifier 
 assignment = lhs_variable '=' expression ';'
 lhs_variable = identifier
-if = 'if' expression block ('else' block)? 
+if = 'if' expression block ('else if' expression block)* (r'else' block)?
 block = '{' statement* '}' //#Block es el código a ejecutar dependiendo de la condicion.
 while = 'while' expression block
 expression = comparison ('&&' comparison)*

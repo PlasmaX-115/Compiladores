@@ -40,13 +40,25 @@ class CodeGenerationVisitor(PTNodeVisitor):
         return f'    local.set ${name}\n'
     
     def visit_if(self, node, children):
+        nested_if = 1
         result = (children[0]
                   +'    if\n'
                   + children[1])
-        if len (children) == 3:
-            result += ('    else\n'
-                       + children[2])
-        result += '    end\n'
+        if len (children) > 2:
+            for i in range(2, len(children), 2):
+                if children[i] == 'else':
+                    result += (
+                        '    else\n'
+                        + children[i + 1])
+                else:
+                    nested_if = nested_if + 1
+                    result += (
+                        '    else\n'
+                        + children[i]
+                        + '    if\n'
+                        + children[i + 1]
+                    )
+            result += '    end\n' * (nested_if)
         return result
 
     
