@@ -15,7 +15,8 @@ if = 'if' expression block ('else if' expression block)* (r'else' block)?
 block = '{' statement* '}' //#Block es el código a ejecutar dependiendo de la condicion.
 while = 'while' expression block
 dowhile = 'do' block 'while' expression ';'
-expression = comparison ('&&' comparison)*
+expression = and_expression ('||' and_expression)*
+and_expression = comparison ('&&' comparison)*
 comparison = additive ((r'(==)' / r'(!=)' / r'(>=)' / r'(>)' / r'(<=)' / r'(<)') additive)*
 additive = multiplicative (('+' / '-' ) multiplicative)*
 multiplicative = unary (('*' / '/' / '%') unary)*
