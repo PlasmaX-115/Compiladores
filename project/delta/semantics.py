@@ -1,4 +1,4 @@
-# Author: A01746664 Eduardo Joel Cortez Valente
+# Author: A01752791 Maximiliano Benítez Ahumada
 
 from arpeggio import PTNodeVisitor
 
@@ -10,7 +10,7 @@ class SemanticMistake(Exception):
 
 
 class SemanticVisitor(PTNodeVisitor):
-    
+
     RESERVED_WORDS = ['true', 'false', 'var', 'if', 'else', 'while', 'do']
 
     def __init__(self, parser, **kwargs):
@@ -25,21 +25,24 @@ class SemanticVisitor(PTNodeVisitor):
     def symbol_table(self):
         return self.__symbol_table
     
+    # Lanzar excepcion si se quiere usar una palabra reservada como nombre de variable.
     def visit_decl_variable(self, node, children):
         name = node.value
         if name in SemanticVisitor.RESERVED_WORDS:
             raise SemanticMistake(
-                'Reserved word not allowed as variable name at position'
+                'Reserved word not allowed as variable name at position '
                 f'{self.position(node)} => {name}'
             )
+    # Lanzar una excepcion si se quiere declarar una variable dos veces.
         if name in self.__symbol_table:
             raise SemanticMistake(
                 'Duplicate variable declaration at position '
                 f'{self.position(node)} => {name}'
             )
         self.__symbol_table.append(name)
-        
-    def visit_lhs_variable(self, node, children):
+
+    # Lanzar excepcion si se hace una asignación a variable no declarada.
+    def visit_lhs_variable  (self, node, children):
         name = node.value
         if name not in self.__symbol_table:
             raise SemanticMistake(
@@ -47,53 +50,43 @@ class SemanticVisitor(PTNodeVisitor):
                 f'{self.position(node)} => {name}'
             )
 
-    '''
-    Nodo que será visitado para hacer las validaciones
-    visit + nombre
-    Args:
-        Node: Nodo
-        Children: Visitas
-    Va de ABAJO hacia ARRIBA
-    '''
     def visit_decimal(self, node, children):
         value = int(node.value)
         if value >= 2 ** 31:
             raise SemanticMistake(
-                'Out of range decimal integer literal at position'
-                f'{self.position(node)} => {value}'
+                'Out of range decimal integer literal at position '
+                f'{self.position(node)} => {value}' 
             )
-    '''
-    Para la tarea un int que lo vuelva tambien la base
-    '''
-    
-    def visit_binary(self, node, children):
-        value = int(node.value[2:], 2)
-        if value >= 2 ** 31:
-            raise SemanticMistake(
-                'Out of range decimal integer literal at position'
-                f'{self.position(node)} => {value}'
-            )
-            
-    def visit_octal(self, node, children):
-        value = int(node.value[2:], 8)
-        if value >= 2 ** 31:
-            raise SemanticMistake(
-                'Out of range decimal integer literal at position'
-                f'{self.position(node)} => {value}'
-            )
-            
-    def visit_hexadecimal(self, node, children):
-        value = int(node.value[2:], 16)
-        if value >= 2 ** 31:
-            raise SemanticMistake(
-                'Out of range decimal integer literal at position'
-                f'{self.position(node)} => {value}'
-            )
-    
-    def visit_rhs_variable(self, node, children):
+        
+    def visit_rhs_variable  (self, node, children):
         name = node.value
         if name not in self.__symbol_table:
             raise SemanticMistake(
-                'Undeclare variable reference at position '
+                'Undeclared variable reference variable at position '
                 f'{self.position(node)} => {name}'
             )
+        
+    def visit_binary (self, node, children):
+        to_decimal = int(node.value[2:], 2)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
+        
+    def visit_octal (self, node, children):
+        to_decimal = int(node.value[2:], 8)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
+        
+    def visit_hexadecimal (self, node, children):
+        to_decimal = int(node.value[2:], 16)
+        if to_decimal >= 2**31:
+            raise SemanticMistake(
+                'Number out of range!'
+                f'{self.position(node)} => {to_decimal}'
+            )
+
