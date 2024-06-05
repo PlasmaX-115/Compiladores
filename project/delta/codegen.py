@@ -146,6 +146,21 @@ class CodeGenerationVisitor(PTNodeVisitor):
                 case'!':
                     result += '    i32.eqz\n' # Equals zero.
         return result
+    
+    def visit_comparison(self, node, children):
+        result = [children[0]]
+        comparators = {
+            "==": "    i32.eq\n",
+            "!=": "    i32.ne\n",
+            ">=": "    i32.ge_s\n",
+            ">": "    i32.gt_s\n",
+            "<=": "    i32.le_s\n",
+            "<": "    i32.lt_s\n",
+        }
+        for i in range(1, len(children), 2):
+            result.append(children[i + 1])
+            result.append(comparators[children[i]])
+        return ''.join(result)
         
     def visit_parenthesis(self, node, children):
         return children[0]
