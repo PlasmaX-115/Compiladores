@@ -1,3 +1,5 @@
+# Author: A01752791 Maximiliano Benítez Ahumada
+
 from delta import Compiler, Phase
 
 source = '#x0FF1ce'

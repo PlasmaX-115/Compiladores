@@ -1,3 +1,5 @@
+# Author: A01752791 Maximiliano Benítez Ahumada
+
 from delta import Compiler, Phase
 
 source = '1 <= 2 == 1 != 0 > 0 < 0 <= 1'

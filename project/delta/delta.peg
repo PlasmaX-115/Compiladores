@@ -1,3 +1,4 @@
+//# Author: A01752791 Maximiliano Benítez Ahumada
 //# Gramática del lenguaje delta
 
 comment = r'[/][/].*|[/][*](.|\n)*?[*][/]'
